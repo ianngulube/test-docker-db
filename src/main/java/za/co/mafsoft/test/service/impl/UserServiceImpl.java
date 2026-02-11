@@ -41,7 +41,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUser(GetUserRequest request) throws UserNotFoundException {
-        var user = userRepository.find("userId = ?1", request.email()).singleResult();
-        return userRequestMapper.toUserResponse(user);
+        var userOptional = userRepository.find("userId = ?1", request.email()).singleResultOptional();
+        if(userOptional.isEmpty()){
+            throw new UserNotFoundException("User is not found");
+        }
+        return userRequestMapper.toUserResponse(userOptional.get());
     }
 }

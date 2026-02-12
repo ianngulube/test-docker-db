@@ -26,11 +26,11 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                     .entity(new ErrorResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(),
                             exception.getMessage()))
                     .build();
-        } else  {
+        } else {
             Throwable root = exception.getCause();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(new ErrorResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(),
-                            root.getMessage()))
+                            root != null ? root.getMessage() : exception.getMessage()))
                     .build();
         }
     }
